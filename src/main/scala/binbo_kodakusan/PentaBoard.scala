@@ -57,8 +57,14 @@ case class PentaBoard() {
 }
 
 object PentaBoard {
+  /**
+    * 盤の高さ
+    */
   val Height = 5
 
+  /**
+    * 問題の定義
+    */
   val Levels: Seq[(Title, Level, Seq[PentaMino])] = Seq(
     (TheSmallSlam(), Level('A', 3),
       // 2, 3, 10
@@ -66,6 +72,18 @@ object PentaBoard {
     (TheSmallSlam(), Level('A', 4),
       // 2, 3, 10, 6
       Seq(PentaMino.Minos(1), PentaMino.Minos(2), PentaMino.Minos(9), PentaMino.Minos(5))),
+    (TheSmallSlam(), Level('A', 5),
+      // 2, 3, 10, 6, 11
+      Seq(PentaMino.Minos(1), PentaMino.Minos(2), PentaMino.Minos(9), PentaMino.Minos(5), PentaMino.Minos(10))),
+    (TheSmallSlam(), Level('A', 6),
+      // 2, 3, 10, 6, 11, 8
+      Seq(PentaMino.Minos(1), PentaMino.Minos(2), PentaMino.Minos(9), PentaMino.Minos(5), PentaMino.Minos(10), PentaMino.Minos(7))),
+    (TheSmallSlam(), Level('A', 7),
+      // 2, 3, 10, 6, 11, 8, 5
+      Seq(PentaMino.Minos(1), PentaMino.Minos(2), PentaMino.Minos(9), PentaMino.Minos(5), PentaMino.Minos(10), PentaMino.Minos(7), PentaMino.Minos(4))),
+    (TheSmallSlam(), Level('A', 8),
+      // 2, 3, 10, 6, 11, 8, 5, 4
+      Seq(PentaMino.Minos(1), PentaMino.Minos(2), PentaMino.Minos(9), PentaMino.Minos(5), PentaMino.Minos(10), PentaMino.Minos(7), PentaMino.Minos(4), PentaMino.Minos(3))),
   )
 
   /**
