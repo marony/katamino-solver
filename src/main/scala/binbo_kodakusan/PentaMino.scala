@@ -43,8 +43,6 @@ object PentaMino {
       * 4
       * □□
       *  □□□
-      * □□□
-      *   □□
       */
     PentaMino(Seq(Index(0, 0), Index(1, 0), Index(1, 1), Index(2, 1), Index(3, 1)), Position(0, 0), Degree0()),
     /**
@@ -59,7 +57,7 @@ object PentaMino {
       * □□□
       * □□
       */
-    PentaMino(Seq(Index(0, 0), Index(1, 0), Index(2, 0), Index(0, 1), Index(0, 2)), Position(0, 0), Degree0()),
+    PentaMino(Seq(Index(0, 0), Index(1, 0), Index(2, 0), Index(0, 1), Index(1, 1)), Position(0, 0), Degree0()),
     /**
       * 7
       * □ □
@@ -140,5 +138,32 @@ object PentaMino {
       case _ => mino
     }
     normalize(m)
+  }
+
+  /**
+    * PentaMinoをposの値によって移動する
+    * @param mino
+    * @return
+    */
+  def move(mino: PentaMino): PentaMino = {
+    PentaMino(mino.blocks.map(b => Index(b.x + mino.pos.x, b.y + mino.pos.y)), mino.pos, mino.rot)
+  }
+
+  /**
+    * 全ての回転・移動パターンを返す
+    * @param width
+    * @param height
+    * @param mino
+    * @return
+    */
+  def getAllPattern(width: Int, height: Int, mino: PentaMino): Seq[PentaMino] = {
+    val rotPattern = if (mino.rot == CantRotate()) Seq(Degree0()) else PentaMino.Rotations
+    for (x <- 0 until width;
+         y <- 0 until height;
+         rot <- rotPattern;
+         pp = PentaMino(mino.blocks, Position(x, y), rot);
+         p = PentaMino.move(PentaMino.rotate(pp));
+         if PentaBoard.isInBoard(width, p))
+      yield p
   }
 }

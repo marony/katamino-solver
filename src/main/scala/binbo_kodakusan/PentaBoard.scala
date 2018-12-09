@@ -1,13 +1,13 @@
 package binbo_kodakusan
 
+import scala.annotation.tailrec
+
 sealed trait Title
 case class TheSmallSlam() extends Title
 
 case class Level(val category: Char, val level: Int)
 
 case class PentaBoard() {
-  val Height = 5
-
   def solve(title: Title, level: Level): Seq[Seq[PentaMino]] = {
     // Noneだったらバグ
     PentaBoard.Levels
@@ -19,79 +19,46 @@ case class PentaBoard() {
   private def _solve(title: Title, level: Level, minos: Seq[PentaMino]): Seq[Seq[PentaMino]] = {
     val width = level.level
 
-    def __isSolve(minos: Seq[PentaMino]): Boolean = {
-      def loop(board: Array[Boolean], minos: Seq[PentaMino]): Boolean = {
-        minos match {
-          case Nil => true
-          case x :: xs => {
-            val xx = PentaMino.rotate(x)
-            val bs = xx.blocks.map(b => Index(b.x + xx.pos.x, b.y + xx.pos.y))
-            // FIXME: mutableすぎ
-            var f = true
-            for (b <- bs) {
-              if (b.x < 0 || b.x >= width || b.y < 0 || b.y >= Height)
-                f = false
-              else {
-                val i = b.x + b.y * width
-                val a = board(i)
-                if (a)
-                  f = false
-                else {
-                  board(i) = true
-                }
-              }
-            }
-            if (f)
-              loop(board, xs)
-            else
-              false
-          }
+    def __addToEach(mino: PentaMino, rs: Seq[Seq[PentaMino]]): Seq[Seq[PentaMino]] = {
+      /**
+        * ミノが重なっていないか
+        * @param mino
+        * @param r
+        * @return
+        */
+      def notCross(mino: PentaMino, r: Seq[PentaMino]): Boolean = {
+        val is = r.flatMap(m => m.blocks)
+        for (b <- mino.blocks) {
+          if (is.contains(b))
+            return false
         }
+        true
       }
 
-      val board = (for (i <- 0 until width * Height) yield false).toArray
-      loop(board, minos)
+      val minos = PentaMino.getAllPattern(width, PentaBoard.Height, mino)
+      for (m <- minos;
+           r <- rs
+           if notCross(m, r))
+        yield m +: r
     }
 
-    def __minos(minos: Seq[PentaMino]): Seq[Seq[PentaMino]] = {
-      val _minos = minos match {
-        case Nil => Seq(Seq())
+    @tailrec
+    def __solve(minos: Seq[PentaMino], rs: Seq[Seq[PentaMino]]): Seq[Seq[PentaMino]] = {
+      minos match {
+        case Nil => rs
         case x :: xs => {
-          x.rot match {
-            case CantRotate() => {
-              for (xss <- __minos(xs)) // TODO: 移動もしないと
-                yield x +: xss
-            }
-            // Degree0, degree90, Degree180, Degree270
-            case _ => {
-              for (xss <- __minos(xs);
-                   rot <- PentaMino.Rotations;
-                   px <- 0 until level.level;
-                   py <- 0 until Height) // TODO: 盤に収まるやつだけ入れる
-                yield PentaMino(x.blocks, Position(px, py), rot) +: xss
-            }
-          }
+          __solve(xs, __addToEach(x, rs))
         }
       }
-      _minos
     }
 
-    def __solve(minos: Seq[PentaMino]): Seq[Seq[PentaMino]] = {
-      println(1)
-      val ms = __minos(minos)
-      println(2)
-      val a = ms.find(__isSolve)
-      a match {
-        case Some(b) => Seq(b)
-        case None => Nil
-      }
-    }
-
-    __solve(minos)
+    __solve(minos, Seq(Seq()))
   }
 }
 
 object PentaBoard {
+  val Height = 5
+
   val Levels: Seq[(Title, Level, Seq[PentaMino])] = Seq(
     (TheSmallSlam(), Level('A', 3),
       // 2, 3, 10
@@ -100,4 +67,14 @@ object PentaBoard {
       // 2, 3, 10, 6
       Seq(PentaMino.Minos(1), PentaMino.Minos(2), PentaMino.Minos(9), PentaMino.Minos(5))),
   )
+
+  /**
+    * 回転・移動済のミノが盤の中に入っているか
+    * @param width
+    * @param mino
+    * @return
+    */
+  def isInBoard(width: Int, mino: PentaMino): Boolean = {
+    mino.blocks.forall(b => b.x >= 0 && b.x < width && b.y >= 0 && b.y < Height)
+  }
 }

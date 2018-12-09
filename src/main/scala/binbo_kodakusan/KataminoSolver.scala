@@ -12,8 +12,7 @@ object KataminoSolver {
     val board = (for (i <- 0 until width * Height) yield 0).toArray
     var no = 1
     for (m <- minos) {
-      val mino = PentaMino.rotate(m)
-      for (b <- mino.blocks.map(b => Index(b.x + mino.pos.x, b.y + mino.pos.y))) {
+      for (b <- m.blocks) {
         if (b.x >= 0 && b.x < width && b.y >= 0 && b.y < Height) {
           board(b.x + b.y * width) = no
         }
