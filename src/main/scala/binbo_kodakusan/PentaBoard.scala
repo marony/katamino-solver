@@ -2,11 +2,27 @@ package binbo_kodakusan
 
 import scala.annotation.tailrec
 
+/**
+  * 問題カテゴリ
+  */
 sealed trait Title
+
+/**
+  * The Small Slam
+  */
 case class TheSmallSlam() extends Title
 
+/**
+  * レベル
+  *
+  * @param category
+  * @param level
+  */
 case class Level(val category: Char, val level: Int)
 
+/**
+  * 盤面を表す
+  */
 case class PentaBoard() {
   def solve(title: Title, level: Level): Seq[Seq[PentaMino]] = {
     // Noneだったらバグ
@@ -16,15 +32,24 @@ case class PentaBoard() {
         .get
   }
 
+  /**
+    * 問題を解く
+    *
+    * @param title
+    * @param level
+    * @param minos
+    * @return
+    */
   private def _solve(title: Title, level: Level, minos: Seq[PentaMino]): Seq[Seq[PentaMino]] = {
     val width = level.level
 
     def __addToEach(mino: PentaMino, rs: Seq[Seq[PentaMino]]): Seq[Seq[PentaMino]] = {
       /**
         * ミノが重なっていないか
-        * @param mino
-        * @param r
-        * @return
+        *
+        * @param mino ミノ
+        * @param r    ミノたち
+        * @return ミノたちとミノの座標が重なっていたらfalse
         */
       def notCross(mino: PentaMino, r: Seq[PentaMino]): Boolean = {
         val is = r.flatMap(m => m.blocks)
@@ -35,6 +60,7 @@ case class PentaBoard() {
         true
       }
 
+      // ミノの全回転・全座標を取得
       val minos = PentaMino.getAllPattern(width, PentaBoard.Height, mino)
       for (m <- minos;
            r <- rs
@@ -45,7 +71,10 @@ case class PentaBoard() {
     @tailrec
     def __solve(minos: Seq[PentaMino], rs: Seq[Seq[PentaMino]]): Seq[Seq[PentaMino]] = {
       minos match {
-        case Nil => rs
+        case Nil => {
+          println(rs)
+          rs
+        }
         case x :: xs => {
           __solve(xs, __addToEach(x, rs))
         }

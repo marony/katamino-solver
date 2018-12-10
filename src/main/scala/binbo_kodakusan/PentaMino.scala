@@ -1,24 +1,89 @@
 package binbo_kodakusan
 
+/**
+  * 回転
+  */
 sealed trait Rotation
+
+/**
+  * 回転できない(しても無駄)
+  */
 case class CantRotate() extends Rotation
+
+/**
+  * 回転なし
+  */
 case class Degree0() extends Rotation
+
+/**
+  * 右90度
+  */
 case class Degree90() extends Rotation
+
+/**
+  * 180度
+  */
 case class Degree180() extends Rotation
+
+/**
+  * 右270度
+  */
 case class Degree270() extends Rotation
+
+/**
+  * 回転なし裏
+  */
 case class RevDegree0() extends Rotation
+
+/**
+  * 右90度裏
+  */
 case class RevDegree90() extends Rotation
+
+/**
+  * 180度裏
+  */
 case class RevDegree180() extends Rotation
+
+/**
+  * 右270度裏
+  */
 case class RevDegree270() extends Rotation
 
+/**
+  * ミノの占める座標
+  *
+  * @param x
+  * @param y
+  */
 case class Index(x: Int, y: Int)
+
+/**
+  * ミノの位置
+  *
+  * @param x
+  * @param y
+  */
 case class Position(x: Int, y: Int)
+
+/**
+  * ミノ
+  *
+  * @param blocks ミノの占める座標
+  * @param pos    ミノの位置
+  * @param rot    ミノの回転
+  */
 case class PentaMino(blocks: Seq[Index], pos: Position, rot: Rotation)
 
 object PentaMino {
+  /**
+    * 全回転の定義
+    */
   val Rotations = Seq(Degree0(), Degree90(), Degree180(), Degree270(), RevDegree0(), RevDegree90(), RevDegree180(), RevDegree270())
 
-  // TODO: 裏返しも実装しないと
+  /**
+    * ミノ(駒)の定義
+    */
   val Minos: Seq[PentaMino] = Seq(
     /**
       * 1

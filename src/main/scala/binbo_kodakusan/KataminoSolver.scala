@@ -1,5 +1,8 @@
 package binbo_kodakusan
 
+/**
+  * 問題解くくん
+  */
 case class KataminoSolver() {
   def solve(title: Title, level: Level): Seq[Seq[PentaMino]] = {
     PentaBoard().solve(title, level)
@@ -7,17 +10,21 @@ case class KataminoSolver() {
 }
 
 object KataminoSolver {
+  /**
+    * 盤面を描画
+    *
+    * @param width
+    * @param minos
+    */
   def printMinos(width: Int, minos: Seq[PentaMino]): Unit = {
     val Height = 5
     val board = (for (i <- 0 until width * Height) yield 0).toArray
-    var no = 1
-    for (m <- minos) {
+    minos.zipWithIndex.foreach { case (m, no) =>
       for (b <- m.blocks) {
         if (b.x >= 0 && b.x < width && b.y >= 0 && b.y < Height) {
-          board(b.x + b.y * width) = no
+          board(b.x + b.y * width) = no + 1
         }
       }
-      no += 1
     }
     for (y <- 0 until Height) {
       for (x <- 0 until width) {
