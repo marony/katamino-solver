@@ -1,6 +1,10 @@
 package binbo_kodakusan
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.annotation.tailrec
+import scala.concurrent.duration.Duration
+import scala.concurrent.{Await, Future}
+import scala.util.Success
 
 /**
   * 問題カテゴリ
@@ -68,7 +72,7 @@ case class PentaBoard() {
         yield m +: r
     }
 
-    @tailrec
+//    @tailrec
     def __solve(minos: Seq[PentaMino], rs: Seq[Seq[PentaMino]]): Seq[Seq[PentaMino]] = {
       minos match {
         case Nil => {
@@ -76,7 +80,8 @@ case class PentaBoard() {
           rs
         }
         case x :: xs => {
-          __solve(xs, __addToEach(x, rs))
+          val f = Future { __solve(xs, __addToEach(x, rs)) }
+          Await.result(f, Duration.Inf)
         }
       }
     }
