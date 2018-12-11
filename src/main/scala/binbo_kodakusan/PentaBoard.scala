@@ -1,6 +1,6 @@
 package binbo_kodakusan
 
-import scala.annotation.tailrec
+import scala.collection.mutable
 
 /**
   * 問題カテゴリ
@@ -43,36 +43,50 @@ case class PentaBoard() {
   private def _solve(title: Title, level: Level, minos: Seq[PentaMino]): Stream[Seq[PentaMino]] = {
     val width = level.level
 
-    def __addToEach(mino: PentaMino, rs: Stream[Seq[PentaMino]]): Stream[Seq[PentaMino]] = {
-      /**
-        * ミノが重なっていないか
-        *
-        * @param mino ミノ
-        * @param r    ミノたち
-        * @return ミノたちとミノの座標が重なっていたらfalse
-        */
-      def notCross(mino: PentaMino, r: Seq[PentaMino]): Boolean = {
-        !mino.blocks.exists(b => r.exists(_r => _r.blocks.contains(b)))
-      }
-
-      // ミノの全回転・全座標を取得
-      // TODO: 5つ未満連続するマスが合ったら解けないの確定する
-      val minos = PentaMino.getAllPattern(width, PentaBoard.Height, mino)
-      for (m <- minos;
-           r <- rs
-           if notCross(m, r))
-        yield m +: r
+    /**
+      * ミノが重なっていないか
+      *
+      * @param mino ミノ
+      * @param r    ミノたち
+      * @return ミノたちとミノの座標が重なっていたらfalse
+      */
+    def notCross(mino: PentaMino, r: Seq[PentaMino]): Boolean = {
+      !mino.blocks.exists(b => r.exists(_r => _r.blocks.contains(b)))
     }
 
-    @tailrec
-    def __solve(minos: Seq[PentaMino], rs: Stream[Seq[PentaMino]]): Stream[Seq[PentaMino]] = {
-      minos match {
-        case Nil => rs
-        case x :: xs => __solve(xs, __addToEach(x, rs))
+    implicit val ord = new Ordering[(PentaMino, Seq[PentaMino], Seq[PentaMino])] {
+      override def compare(lhs: (PentaMino, Seq[PentaMino], Seq[PentaMino]), rhs: (PentaMino, Seq[PentaMino], Seq[PentaMino])): Int = {
+        // 残っている数が多い方優先(幅優先)
+        rhs._2.length - lhs._2.length
+      }
+    }
+    val queue = new mutable.PriorityQueue[(PentaMino, Seq[PentaMino], Seq[PentaMino])];
+
+    {
+      val m :: ms = minos
+      val ma = PentaMino.getAllPattern(width, PentaBoard.Height, m)
+      val rss = Seq()
+      for (_m <- ma) {
+        if (notCross(_m, rss))
+          queue.enqueue((_m, ms, rss))
       }
     }
 
-    __solve(minos, Stream(Seq()))
+    while (queue.length > 0) {
+      val (m, ms, rs) = queue.dequeue()
+      val rss = m +: rs
+      ms match {
+        case _m +: _ms => {
+          val ma = PentaMino.getAllPattern(width, PentaBoard.Height, _m)
+          for (__m <- ma) {
+            if (notCross(__m, rss))
+              queue.enqueue((__m, _ms, rss))
+          }
+        }
+        case _ => return Stream(rss)
+      }
+    }
+    return Stream.empty[Seq[PentaMino]]
   }
 }
 
