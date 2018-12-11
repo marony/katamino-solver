@@ -221,11 +221,11 @@ object PentaMino {
     * @param mino
     * @return
     */
-  def getAllPattern(width: Int, height: Int, mino: PentaMino): Seq[PentaMino] = {
+  def getAllPattern(width: Int, height: Int, mino: PentaMino): Stream[PentaMino] = {
     val rotPattern = if (mino.rot == CantRotate()) Seq(Degree0()) else PentaMino.Rotations
-    for (x <- 0 until width;
-         y <- 0 until height;
-         rot <- rotPattern;
+    for (x <- (0 until width).toStream;
+         y <- (0 until height).toStream;
+         rot <- rotPattern.toStream;
          pp = PentaMino(mino.blocks, Position(x, y), rot);
          p = PentaMino.move(PentaMino.rotate(pp));
          if PentaBoard.isInBoard(width, p))

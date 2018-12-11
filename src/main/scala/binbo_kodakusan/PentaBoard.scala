@@ -24,7 +24,7 @@ case class Level(val category: Char, val level: Int)
   * 盤面を表す
   */
 case class PentaBoard() {
-  def solve(title: Title, level: Level): Seq[Seq[PentaMino]] = {
+  def solve(title: Title, level: Level): Stream[Seq[PentaMino]] = {
     // Noneだったらバグ
     PentaBoard.Levels
       .find { case (t, l, _) => t == title && l == level }
@@ -40,10 +40,10 @@ case class PentaBoard() {
     * @param minos
     * @return
     */
-  private def _solve(title: Title, level: Level, minos: Seq[PentaMino]): Seq[Seq[PentaMino]] = {
+  private def _solve(title: Title, level: Level, minos: Seq[PentaMino]): Stream[Seq[PentaMino]] = {
     val width = level.level
 
-    def __addToEach(mino: PentaMino, rs: Seq[Seq[PentaMino]]): Seq[Seq[PentaMino]] = {
+    def __addToEach(mino: PentaMino, rs: Stream[Seq[PentaMino]]): Stream[Seq[PentaMino]] = {
       /**
         * ミノが重なっていないか
         *
@@ -65,14 +65,14 @@ case class PentaBoard() {
     }
 
     @tailrec
-    def __solve(minos: Seq[PentaMino], rs: Seq[Seq[PentaMino]]): Seq[Seq[PentaMino]] = {
+    def __solve(minos: Seq[PentaMino], rs: Stream[Seq[PentaMino]]): Stream[Seq[PentaMino]] = {
       minos match {
         case Nil => rs
         case x :: xs => __solve(xs, __addToEach(x, rs))
       }
     }
 
-    __solve(minos, Seq(Seq()))
+    __solve(minos, Stream(Seq()))
   }
 }
 
