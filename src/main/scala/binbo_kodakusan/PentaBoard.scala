@@ -46,6 +46,7 @@ case class PentaBoard() {
     implicit val ord = new Ordering[(PentaMino, Seq[PentaMino], Seq[PentaMino])] {
       override def compare(lhs: (PentaMino, Seq[PentaMino], Seq[PentaMino]), rhs: (PentaMino, Seq[PentaMino], Seq[PentaMino])): Int = {
         // 残っている数が多い方優先(幅優先)
+        // TODO: 重心か片よっている順にしたい
         rhs._2.length - lhs._2.length
       }
     }

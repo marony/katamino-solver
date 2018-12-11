@@ -1,6 +1,35 @@
 package binbo_kodakusan
 
 /**
+  * closeできるtrait
+  */
+trait Closable {
+  def close()
+}
+
+/**
+  * Closableをusingで使う
+  * ローンパターン
+  */
+object Loan {
+  def using[T <: Closable](closable: T)(f: => Unit): Unit = {
+    f
+    closable.close()
+  }
+}
+
+/**
+  * ローンパターンで処理のログを出力
+  * @param name
+  */
+class LoggableFunction(name: String = "") extends Closable {
+  private[this] val start = System.currentTimeMillis()
+  println("========== " + name + " ==========")
+
+  override def close(): Unit = println("Elapsed(ms) : " + (System.currentTimeMillis() - start))
+}
+
+/**
   * まいんちゃん
   */
 object Kanamino extends App {
@@ -50,40 +79,10 @@ object Kanamino extends App {
     (TheSmallSlam(), Level('G', 7)),
     (TheSmallSlam(), Level('G', 8)),
   )) {
-    val start = methodStart(tl.toString)
-    val as: Seq[Seq[PentaMino]] = solver.solve(tl._1, tl._2)
+    Loan.using(new LoggableFunction(tl.toString())) {
+      val as: Seq[Seq[PentaMino]] = solver.solve(tl._1, tl._2)
         .take(1)
-    as.foreach(minos => {
-      KataminoSolver.printMinos(tl._2.level, minos)
-      methodEnd(start)
-    })
-  }
-
-  /**
-    * メソッド開始ログ
-    *
-    * @param methodName
-    * @return
-    */
-  def methodStart(methodName : String) : Long = {
-    println("========== " + methodName + " ==========")
-    System.currentTimeMillis()
-  }
-
-  /**
-    * メソッド終了ログ
-    *
-    * @param start
-    * @param answer
-    */
-  def methodEnd(start : Long) : Unit = {
-    println("Elapsed(ms) : " + (System.currentTimeMillis() - start))
+      as.foreach(minos => KataminoSolver.printMinos(tl._2.level, minos))
+    }
   }
 }
-/*
-111
-312
-312
-322
-332
- */
