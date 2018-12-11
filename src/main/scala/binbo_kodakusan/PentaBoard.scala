@@ -43,17 +43,6 @@ case class PentaBoard() {
   private def _solve(title: Title, level: Level, minos: Seq[PentaMino]): Stream[Seq[PentaMino]] = {
     val width = level.level
 
-    /**
-      * ミノが重なっていないか
-      *
-      * @param mino ミノ
-      * @param r    ミノたち
-      * @return ミノたちとミノの座標が重なっていたらfalse
-      */
-    def notCross(mino: PentaMino, r: Seq[PentaMino]): Boolean = {
-      !mino.blocks.exists(b => r.exists(_r => _r.blocks.contains(b)))
-    }
-
     implicit val ord = new Ordering[(PentaMino, Seq[PentaMino], Seq[PentaMino])] {
       override def compare(lhs: (PentaMino, Seq[PentaMino], Seq[PentaMino]), rhs: (PentaMino, Seq[PentaMino], Seq[PentaMino])): Int = {
         // 残っている数が多い方優先(幅優先)
@@ -67,7 +56,8 @@ case class PentaBoard() {
       val ma = PentaMino.getAllPattern(width, PentaBoard.Height, m)
       val rss = Seq()
       for (_m <- ma) {
-        if (notCross(_m, rss))
+        if (PentaBoard.notCross(_m, rss) &&
+          PentaBoard.canPut(width, PentaBoard.Height, _m, rss))
           queue.enqueue((_m, ms, rss))
       }
     }
@@ -79,7 +69,8 @@ case class PentaBoard() {
         case _m +: _ms => {
           val ma = PentaMino.getAllPattern(width, PentaBoard.Height, _m)
           for (__m <- ma) {
-            if (notCross(__m, rss))
+            if (PentaBoard.notCross(__m, rss) &&
+              PentaBoard.canPut(width, PentaBoard.Height, __m, rss))
               queue.enqueue((__m, _ms, rss))
           }
         }
@@ -118,6 +109,114 @@ object PentaBoard {
     (TheSmallSlam(), Level('A', 8),
       // 2, 3, 10, 6, 11, 8, 5, 4
       Seq(PentaMino.Minos(1), PentaMino.Minos(2), PentaMino.Minos(9), PentaMino.Minos(5), PentaMino.Minos(10), PentaMino.Minos(7), PentaMino.Minos(4), PentaMino.Minos(3))),
+    (TheSmallSlam(), Level('B', 3),
+      // 4, 6, 7
+      Seq(PentaMino.Minos(3), PentaMino.Minos(5), PentaMino.Minos(6))),
+    (TheSmallSlam(), Level('B', 4),
+      // 4, 6, 7, 2
+      Seq(PentaMino.Minos(3), PentaMino.Minos(5), PentaMino.Minos(6), PentaMino.Minos(1))),
+    (TheSmallSlam(), Level('B', 5),
+      // 4, 6, 7, 2, 8
+      Seq(PentaMino.Minos(3), PentaMino.Minos(5), PentaMino.Minos(6), PentaMino.Minos(1), PentaMino.Minos(7))),
+    (TheSmallSlam(), Level('B', 6),
+      // 4, 6, 7, 2, 8, 3
+      Seq(PentaMino.Minos(3), PentaMino.Minos(5), PentaMino.Minos(6), PentaMino.Minos(1), PentaMino.Minos(7), PentaMino.Minos(2))),
+    (TheSmallSlam(), Level('B', 7),
+      // 4, 6, 7, 2, 8, 3, 10
+      Seq(PentaMino.Minos(3), PentaMino.Minos(5), PentaMino.Minos(6), PentaMino.Minos(1), PentaMino.Minos(7), PentaMino.Minos(2), PentaMino.Minos(9))),
+    (TheSmallSlam(), Level('B', 8),
+      // 4, 6, 7, 2, 8, 3, 10, 11
+      Seq(PentaMino.Minos(3), PentaMino.Minos(5), PentaMino.Minos(6), PentaMino.Minos(1), PentaMino.Minos(7), PentaMino.Minos(2), PentaMino.Minos(9), PentaMino.Minos(10))),
+    (TheSmallSlam(), Level('C', 3),
+      // 2, 5, 6
+      Seq(PentaMino.Minos(1), PentaMino.Minos(4), PentaMino.Minos(5))),
+    (TheSmallSlam(), Level('C', 4),
+      // 2, 5, 6, 3
+      Seq(PentaMino.Minos(1), PentaMino.Minos(4), PentaMino.Minos(5), PentaMino.Minos(2))),
+    (TheSmallSlam(), Level('C', 5),
+      // 2, 5, 6, 3, 4
+      Seq(PentaMino.Minos(1), PentaMino.Minos(4), PentaMino.Minos(5), PentaMino.Minos(2), PentaMino.Minos(3))),
+    (TheSmallSlam(), Level('C', 6),
+      // 2, 5, 6, 3, 4, 7
+      Seq(PentaMino.Minos(1), PentaMino.Minos(4), PentaMino.Minos(5), PentaMino.Minos(2), PentaMino.Minos(3), PentaMino.Minos(6))),
+    (TheSmallSlam(), Level('C', 7),
+      // 2, 5, 6, 3, 4, 7, 8
+      Seq(PentaMino.Minos(1), PentaMino.Minos(4), PentaMino.Minos(5), PentaMino.Minos(2), PentaMino.Minos(3), PentaMino.Minos(6), PentaMino.Minos(7))),
+    (TheSmallSlam(), Level('C', 8),
+      // 2, 5, 6, 3, 4, 7, 8, 9
+      Seq(PentaMino.Minos(1), PentaMino.Minos(4), PentaMino.Minos(5), PentaMino.Minos(2), PentaMino.Minos(3), PentaMino.Minos(6), PentaMino.Minos(7), PentaMino.Minos(8))),
+    (TheSmallSlam(), Level('D', 3),
+      // 3, 6, 7
+      Seq(PentaMino.Minos(2), PentaMino.Minos(5), PentaMino.Minos(6))),
+    (TheSmallSlam(), Level('D', 4),
+      // 3, 6, 7, 4
+      Seq(PentaMino.Minos(2), PentaMino.Minos(5), PentaMino.Minos(6), PentaMino.Minos(3))),
+    (TheSmallSlam(), Level('D', 5),
+      // 3, 6, 7, 4, 5
+      Seq(PentaMino.Minos(2), PentaMino.Minos(5), PentaMino.Minos(6), PentaMino.Minos(3), PentaMino.Minos(4))),
+    (TheSmallSlam(), Level('D', 6),
+      // 3, 6, 7, 4, 5, 9
+      Seq(PentaMino.Minos(2), PentaMino.Minos(5), PentaMino.Minos(6), PentaMino.Minos(3), PentaMino.Minos(4), PentaMino.Minos(8))),
+    (TheSmallSlam(), Level('D', 7),
+      // 3, 6, 7, 4, 5, 9, 11
+      Seq(PentaMino.Minos(2), PentaMino.Minos(5), PentaMino.Minos(6), PentaMino.Minos(3), PentaMino.Minos(4), PentaMino.Minos(8), PentaMino.Minos(10))),
+    (TheSmallSlam(), Level('D', 8),
+      // 3, 6, 7, 4, 5, 9, 11, 10
+      Seq(PentaMino.Minos(2), PentaMino.Minos(5), PentaMino.Minos(6), PentaMino.Minos(3), PentaMino.Minos(4), PentaMino.Minos(8), PentaMino.Minos(10), PentaMino.Minos(9))),
+    (TheSmallSlam(), Level('E', 3),
+      // 2, 4, 5
+      Seq(PentaMino.Minos(1), PentaMino.Minos(3), PentaMino.Minos(4))),
+    (TheSmallSlam(), Level('E', 4),
+      // 2, 4, 5, 8
+      Seq(PentaMino.Minos(1), PentaMino.Minos(3), PentaMino.Minos(4), PentaMino.Minos(7))),
+    (TheSmallSlam(), Level('E', 5),
+      // 2, 4, 5, 8, 7
+      Seq(PentaMino.Minos(1), PentaMino.Minos(3), PentaMino.Minos(4), PentaMino.Minos(7), PentaMino.Minos(6))),
+    (TheSmallSlam(), Level('E', 6),
+      // 2, 4, 5, 8, 7, 10
+      Seq(PentaMino.Minos(1), PentaMino.Minos(3), PentaMino.Minos(4), PentaMino.Minos(7), PentaMino.Minos(6), PentaMino.Minos(9))),
+    (TheSmallSlam(), Level('E', 7),
+      // 2, 4, 5, 8, 7, 10, 3
+      Seq(PentaMino.Minos(1), PentaMino.Minos(3), PentaMino.Minos(4), PentaMino.Minos(7), PentaMino.Minos(6), PentaMino.Minos(9), PentaMino.Minos(2))),
+    (TheSmallSlam(), Level('E', 8),
+      // 2, 4, 5, 8, 7, 10, 3, 11
+      Seq(PentaMino.Minos(1), PentaMino.Minos(3), PentaMino.Minos(4), PentaMino.Minos(7), PentaMino.Minos(6), PentaMino.Minos(9), PentaMino.Minos(2), PentaMino.Minos(10))),
+    (TheSmallSlam(), Level('F', 3),
+      // 6, 7, 9
+      Seq(PentaMino.Minos(5), PentaMino.Minos(6), PentaMino.Minos(8))),
+    (TheSmallSlam(), Level('F', 4),
+      // 6, 7, 9, 3
+      Seq(PentaMino.Minos(5), PentaMino.Minos(6), PentaMino.Minos(8), PentaMino.Minos(2))),
+    (TheSmallSlam(), Level('F', 5),
+      // 6, 7, 9, 3, 10
+      Seq(PentaMino.Minos(5), PentaMino.Minos(6), PentaMino.Minos(8), PentaMino.Minos(2), PentaMino.Minos(9))),
+    (TheSmallSlam(), Level('F', 6),
+      // 6, 7, 9, 3, 10, 4
+      Seq(PentaMino.Minos(5), PentaMino.Minos(6), PentaMino.Minos(8), PentaMino.Minos(2), PentaMino.Minos(9), PentaMino.Minos(3))),
+    (TheSmallSlam(), Level('F', 7),
+      // 6, 7, 9, 3, 10, 4, 2
+      Seq(PentaMino.Minos(5), PentaMino.Minos(6), PentaMino.Minos(8), PentaMino.Minos(2), PentaMino.Minos(9), PentaMino.Minos(3), PentaMino.Minos(1))),
+    (TheSmallSlam(), Level('F', 8),
+      // 6, 7, 9, 3, 10, 4, 2, 11
+      Seq(PentaMino.Minos(5), PentaMino.Minos(6), PentaMino.Minos(8), PentaMino.Minos(2), PentaMino.Minos(9), PentaMino.Minos(3), PentaMino.Minos(1), PentaMino.Minos(10))),
+    (TheSmallSlam(), Level('G', 3),
+      // 2, 5, 6
+      Seq(PentaMino.Minos(1), PentaMino.Minos(4), PentaMino.Minos(5))),
+    (TheSmallSlam(), Level('G', 4),
+      // 2, 5, 6, 8
+      Seq(PentaMino.Minos(1), PentaMino.Minos(4), PentaMino.Minos(5), PentaMino.Minos(7))),
+    (TheSmallSlam(), Level('G', 5),
+      // 2, 5, 6, 8, 3
+      Seq(PentaMino.Minos(1), PentaMino.Minos(4), PentaMino.Minos(5), PentaMino.Minos(7), PentaMino.Minos(2))),
+    (TheSmallSlam(), Level('G', 6),
+      // 2, 5, 6, 8, 3, 11
+      Seq(PentaMino.Minos(1), PentaMino.Minos(4), PentaMino.Minos(5), PentaMino.Minos(7), PentaMino.Minos(2), PentaMino.Minos(10))),
+    (TheSmallSlam(), Level('G', 7),
+      // 2, 5, 6, 8, 3, 11, 4
+      Seq(PentaMino.Minos(1), PentaMino.Minos(4), PentaMino.Minos(5), PentaMino.Minos(7), PentaMino.Minos(2), PentaMino.Minos(10), PentaMino.Minos(3))),
+    (TheSmallSlam(), Level('G', 8),
+      // 2, 5, 6, 8, 3, 11, 4, 9
+      Seq(PentaMino.Minos(1), PentaMino.Minos(4), PentaMino.Minos(5), PentaMino.Minos(7), PentaMino.Minos(2), PentaMino.Minos(10), PentaMino.Minos(3), PentaMino.Minos(8))),
   )
 
   /**
@@ -128,5 +227,55 @@ object PentaBoard {
     */
   def isInBoard(width: Int, mino: PentaMino): Boolean = {
     mino.blocks.forall(b => b.x >= 0 && b.x < width && b.y >= 0 && b.y < Height)
+  }
+
+  /**
+    * ミノが重なっていないか
+    *
+    * @param mino ミノ
+    * @param r    ミノたち
+    * @return ミノたちとミノの座標が重なっていたらfalse
+    */
+  def notCross(mino: PentaMino, rs: Seq[PentaMino]): Boolean = {
+    !mino.blocks.exists(b => rs.exists(_.blocks.contains(b)))
+  }
+
+  /**
+    * 置く場所があるか
+    * 連続して空いている領域に5の倍数個ではないものがあったらfalse
+    * @param mino
+    * @return
+    */
+  def canPut(width: Int, height: Int, mino: PentaMino, rs: Seq[PentaMino]): Boolean = {
+    def index(i: Index) = i.y * width + i.x
+
+    def _canPut(board: Array[Int]): Boolean = {
+      def loop(x: Int, y: Int, board: Array[Int]): Int = {
+        var c = 0
+        if (x >= 0 && x < width && y >= 0 && y < height &&
+          board(index(Index(x, y))) == 0) {
+          c += 1
+          board(index(Index(x, y))) = 2
+          c += loop(x - 1, y, board)
+          c += loop(x, y - 1, board)
+          c += loop(x + 1, y, board)
+          c += loop(x, y + 1, board)
+        }
+        c
+      }
+      for (y <- 0 until height; x <- 0 until width) {
+        val c = loop(x, y, board)
+        if (c % 5 != 0)
+          return false
+      }
+      true
+    }
+
+    val rss = mino +: rs
+    val board = Seq.fill(width * height)(0).toArray
+    for (m <- rss) {
+      m.blocks.foreach(b => board(index(b)) = 1)
+    }
+    _canPut(board)
   }
 }

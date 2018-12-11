@@ -116,7 +116,7 @@ object PentaMino {
       * □
       * □□□
       */
-    PentaMino(Seq(Index(0, 0), Index(0, 1), Index(0, 2), Index(1, 2), Index(1, 3)), Position(0, 0), Degree0()),
+    PentaMino(Seq(Index(0, 0), Index(0, 1), Index(0, 2), Index(1, 2), Index(2, 2)), Position(0, 0), Degree0()),
     /**
       * 6
       * □□□
