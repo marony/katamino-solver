@@ -1,10 +1,6 @@
 package binbo_kodakusan
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.annotation.tailrec
-import scala.concurrent.duration.Duration
-import scala.concurrent.{Await, Future}
-import scala.util.Success
 
 /**
   * 問題カテゴリ
@@ -56,15 +52,11 @@ case class PentaBoard() {
         * @return ミノたちとミノの座標が重なっていたらfalse
         */
       def notCross(mino: PentaMino, r: Seq[PentaMino]): Boolean = {
-        val is = r.flatMap(m => m.blocks)
-        for (b <- mino.blocks) {
-          if (is.contains(b))
-            return false
-        }
-        true
+        !mino.blocks.exists(b => r.exists(_r => _r.blocks.contains(b)))
       }
 
       // ミノの全回転・全座標を取得
+      // TODO: 5つ未満連続するマスが合ったら解けないの確定する
       val minos = PentaMino.getAllPattern(width, PentaBoard.Height, mino)
       for (m <- minos;
            r <- rs
@@ -72,17 +64,11 @@ case class PentaBoard() {
         yield m +: r
     }
 
-//    @tailrec
+    @tailrec
     def __solve(minos: Seq[PentaMino], rs: Seq[Seq[PentaMino]]): Seq[Seq[PentaMino]] = {
       minos match {
-        case Nil => {
-          println(rs)
-          rs
-        }
-        case x :: xs => {
-          val f = Future { __solve(xs, __addToEach(x, rs)) }
-          Await.result(f, Duration.Inf)
-        }
+        case Nil => rs
+        case x :: xs => __solve(xs, __addToEach(x, rs))
       }
     }
 

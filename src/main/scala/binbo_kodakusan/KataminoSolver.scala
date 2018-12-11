@@ -18,7 +18,7 @@ object KataminoSolver {
     */
   def printMinos(width: Int, minos: Seq[PentaMino]): Unit = {
     val Height = 5
-    val board = (for (i <- 0 until width * Height) yield 0).toArray
+    val board = (for (_ <- 0 until width * Height) yield 0).toArray
     minos.zipWithIndex.foreach { case (m, no) =>
       for (b <- m.blocks) {
         if (b.x >= 0 && b.x < width && b.y >= 0 && b.y < Height) {
