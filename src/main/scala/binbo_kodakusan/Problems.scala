@@ -5,6 +5,7 @@ object Problems {
     * 問題の定義
     */
   val Levels: Seq[(Title, Level, Seq[PentaMino])] = Seq(
+    // The Small Slam
     (TheSmallSlam(), Level('A', 3),
       // 2, 3, 10
       Seq(PentaMino.Minos(1), PentaMino.Minos(2), PentaMino.Minos(9))),
@@ -131,5 +132,21 @@ object Problems {
     (TheSmallSlam(), Level('G', 8),
       // 2, 5, 6, 8, 3, 11, 4, 9
       Seq(PentaMino.Minos(1), PentaMino.Minos(4), PentaMino.Minos(5), PentaMino.Minos(7), PentaMino.Minos(2), PentaMino.Minos(10), PentaMino.Minos(3), PentaMino.Minos(8))),
+    // The Slam
+    (TheSlam(), Level('A', 5),
+      // 2, 6, 7, 9, 11
+      Seq(PentaMino.Minos(1), PentaMino.Minos(5), PentaMino.Minos(6), PentaMino.Minos(8), PentaMino.Minos(10))),
+    (TheSlam(), Level('A', 6),
+      // 2, 6, 7, 9, 11, 3
+      Seq(PentaMino.Minos(1), PentaMino.Minos(5), PentaMino.Minos(6), PentaMino.Minos(8), PentaMino.Minos(10), PentaMino.Minos(2))),
+    (TheSlam(), Level('A', 7),
+      // 2, 6, 7, 9, 11, 3, 8
+      Seq(PentaMino.Minos(1), PentaMino.Minos(5), PentaMino.Minos(6), PentaMino.Minos(8), PentaMino.Minos(10), PentaMino.Minos(2), PentaMino.Minos(7))),
+    (TheSlam(), Level('A', 8),
+      // 2, 6, 7, 9, 11, 3, 8, 4
+      Seq(PentaMino.Minos(1), PentaMino.Minos(5), PentaMino.Minos(6), PentaMino.Minos(8), PentaMino.Minos(10), PentaMino.Minos(2), PentaMino.Minos(7), PentaMino.Minos(3))),
+    (TheSlam(), Level('A', 9),
+      // 2, 6, 7, 9, 11, 3, 8, 4, 5
+      Seq(PentaMino.Minos(1), PentaMino.Minos(5), PentaMino.Minos(6), PentaMino.Minos(8), PentaMino.Minos(10), PentaMino.Minos(2), PentaMino.Minos(7), PentaMino.Minos(3), PentaMino.Minos(4))),
   )
 }

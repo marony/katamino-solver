@@ -13,6 +13,11 @@ sealed trait Title
 case class TheSmallSlam() extends Title
 
 /**
+  * The Slam
+  */
+case class TheSlam() extends Title
+
+/**
   * レベル
   *
   * @param category

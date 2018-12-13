@@ -21,6 +21,7 @@
 　ひとまずThe Small Slam(6歳以上向け)のA1〜G8まで解けたので解答をのせておきます。  
 　自分で解きたい人は見ないでください。
 
+### The Small Slam
 ```
 [info] Running (fork) binbo_kodakusan.Kanamino 
 [info] ========== (TheSmallSlam(),Level(A,3)) ==========
@@ -317,5 +318,44 @@
 [info] 22335668
 [info] 23355668
 [info] Elapsed(ms) : 47401
-[success] Total time: 226 s, completed 2018/12/12 8:38:12
+```
+
+## The Slam
+```
+[info] Running (fork) binbo_kodakusan.Kanamino 
+[info] ========== (TheSlam(),Level(A,5)) ==========
+[info] 15555
+[info] 11225
+[info] 41122
+[info] 44323
+[info] 44333
+[info] Elapsed(ms) : 763
+[info] ========== (TheSlam(),Level(A,6)) ==========
+[info] 444555
+[info] 434551
+[info] 332211
+[info] 633221
+[info] 666621
+[info] Elapsed(ms) : 961
+[info] ========== (TheSlam(),Level(A,7)) ==========
+[info] 3311555
+[info] 7331565
+[info] 7431166
+[info] 7444266
+[info] 7742222
+[info] Elapsed(ms) : 1683
+[info] ========== (TheSlam(),Level(A,8)) ==========
+[info] 44228888
+[info] 74428666
+[info] 77422656
+[info] 77311555
+[info] 33331115
+[info] Elapsed(ms) : 5533
+[info] ========== (TheSlam(),Level(A,9)) ==========
+[info] 999988111
+[info] 777988821
+[info] 767553321
+[info] 666455322
+[info] 644445332
+[info] Elapsed(ms) : 36853
 ```
