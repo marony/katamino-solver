@@ -18,6 +18,11 @@ case class TheSmallSlam() extends Title
 case class TheSlam() extends Title
 
 /**
+  * The Grand Slam
+  */
+case class TheGrandSlam() extends Title
+
+/**
   * レベル
   *
   * @param category

@@ -148,5 +148,30 @@ object Problems {
     (TheSlam(), Level('A', 9),
       // 2, 6, 7, 9, 11, 3, 8, 4, 5
       Seq(PentaMino.Minos(1), PentaMino.Minos(5), PentaMino.Minos(6), PentaMino.Minos(8), PentaMino.Minos(10), PentaMino.Minos(2), PentaMino.Minos(7), PentaMino.Minos(3), PentaMino.Minos(4))),
+    // The Grand Slam
+    (TheGrandSlam(), Level('A', 4),
+      // 2, 4, 5, 8
+      Seq(PentaMino.Minos(1), PentaMino.Minos(3), PentaMino.Minos(4), PentaMino.Minos(7))),
+    (TheGrandSlam(), Level('A', 5),
+      // 2, 4, 5, 8, 7
+      Seq(PentaMino.Minos(1), PentaMino.Minos(3), PentaMino.Minos(4), PentaMino.Minos(7), PentaMino.Minos(6))),
+    (TheGrandSlam(), Level('A', 6),
+      // 2, 4, 5, 8, 7, 10
+      Seq(PentaMino.Minos(1), PentaMino.Minos(3), PentaMino.Minos(4), PentaMino.Minos(7), PentaMino.Minos(6), PentaMino.Minos(9))),
+    (TheGrandSlam(), Level('A', 7),
+      // 2, 4, 5, 8, 7, 10, 6
+      Seq(PentaMino.Minos(1), PentaMino.Minos(3), PentaMino.Minos(4), PentaMino.Minos(7), PentaMino.Minos(6), PentaMino.Minos(9), PentaMino.Minos(5))),
+    (TheGrandSlam(), Level('A', 8),
+      // 2, 4, 5, 8, 7, 10, 6, 12
+      Seq(PentaMino.Minos(1), PentaMino.Minos(3), PentaMino.Minos(4), PentaMino.Minos(7), PentaMino.Minos(6), PentaMino.Minos(9), PentaMino.Minos(5), PentaMino.Minos(11))),
+    (TheGrandSlam(), Level('A', 9),
+      // 2, 4, 5, 8, 7, 10, 6, 12, 9
+      Seq(PentaMino.Minos(1), PentaMino.Minos(3), PentaMino.Minos(4), PentaMino.Minos(7), PentaMino.Minos(6), PentaMino.Minos(9), PentaMino.Minos(5), PentaMino.Minos(11), PentaMino.Minos(8))),
+    (TheGrandSlam(), Level('A', 10),
+      // 2, 4, 5, 8, 7, 10, 6, 12, 9, 1
+      Seq(PentaMino.Minos(1), PentaMino.Minos(3), PentaMino.Minos(4), PentaMino.Minos(7), PentaMino.Minos(6), PentaMino.Minos(9), PentaMino.Minos(5), PentaMino.Minos(11), PentaMino.Minos(8), PentaMino.Minos(0))),
+    (TheGrandSlam(), Level('A', 11),
+      // 2, 4, 5, 8, 7, 10, 6, 12, 9, 1, 11
+      Seq(PentaMino.Minos(1), PentaMino.Minos(3), PentaMino.Minos(4), PentaMino.Minos(7), PentaMino.Minos(6), PentaMino.Minos(9), PentaMino.Minos(5), PentaMino.Minos(11), PentaMino.Minos(8), PentaMino.Minos(0), PentaMino.Minos(10))),
   )
 }
