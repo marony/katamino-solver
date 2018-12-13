@@ -1,18 +1,11 @@
 package binbo_kodakusan
 
 /**
-  * closeできるtrait
-  */
-trait Closable {
-  def close()
-}
-
-/**
   * Closableをusingで使う
   * ローンパターン
   */
 object Loan {
-  def using[T <: Closable](closable: T)(f: => Unit): Unit = {
+  def using[T <: { def close() }](closable: T)(f: => Unit): Unit = {
     f
     closable.close()
   }
@@ -22,7 +15,7 @@ object Loan {
   * ローンパターンで処理のログを出力
   * @param name
   */
-class LoggableFunction(name: String = "") extends Closable {
+class LoggableFunction(name: String = "") {
   private[this] val start = System.currentTimeMillis()
   println("========== " + name + " ==========")
 
