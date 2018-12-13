@@ -2,7 +2,7 @@
 
 ## 背景
 
-　Katamino(カタミノ)というフランス製の
+　[Katamino(カタミノ)](https://www.amazon.co.jp/dp/B0019O19BU/)というフランス製の
 [おもちゃ(パズル)を買いました](https://twitter.com/_marony/status/1071394840896667649)
 。  
 　そこで[解いてみた](https://twitter.com/_marony/status/1071439763310137345)のですが
