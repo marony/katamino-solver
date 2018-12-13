@@ -14,6 +14,7 @@
 
 　Scalaでリスト(その後Streamに変更)で関数型言語っぽく書いてみたのですが、A8問題の時点で10分とかかかるありさま。
 仕方がないので今はループで書き直しまして10秒程度になっています。
+末尾再帰にはなっていましたが、僕の書き方が悪かっただけでScalaが悪いわけではないです。
 
 
 ## 実行結果(ネタバレ注意)
@@ -358,4 +359,64 @@
 [info] 666455322
 [info] 644445332
 [info] Elapsed(ms) : 36853
+```
+## The Grand Slam
+```
+[info] Running (fork) binbo_kodakusan.Kanamino 
+[info] ========== (TheGrandSlam(),Level(A,4)) ==========
+[info] 3222
+[info] 3112
+[info] 3312
+[info] 4311
+[info] 4444
+[info] Elapsed(ms) : 323
+[info] ========== (TheGrandSlam(),Level(A,5)) ==========
+[info] 45555
+[info] 45333
+[info] 44223
+[info] 14123
+[info] 11122
+[info] Elapsed(ms) : 100
+[info] ========== (TheGrandSlam(),Level(A,6)) ==========
+[info] 665553
+[info] 655333
+[info] 612324
+[info] 612224
+[info] 111444
+[info] Elapsed(ms) : 114
+[info] ========== (TheGrandSlam(),Level(A,7)) ==========
+[info] 2666111
+[info] 2226611
+[info] 2777745
+[info] 3734445
+[info] 3334555
+[info] Elapsed(ms) : 3034
+[info] ========== (TheGrandSlam(),Level(A,8)) ==========
+[info] 22777333
+[info] 22557738
+[info] 62544138
+[info] 65541118
+[info] 66644188
+[info] Elapsed(ms) : 3882
+[info] ========== (TheGrandSlam(),Level(A,9)) ==========
+[info] 555333888
+[info] 525338866
+[info] 222144467
+[info] 921114667
+[info] 999914777
+[info] Elapsed(ms) : 616752
+[info] ========== (TheGrandSlam(),Level(A,10)) ==========
+[info] 6664442555
+[info] 6364422258
+[info] 3339997258
+[info] 10399777888
+[info] 10101010711111
+[info] Elapsed(ms) : 352991
+[info] ========== (TheGrandSlam(),Level(A,11)) ==========
+[info] 112222268999
+[info] 111111113368889
+[info] 77433666189
+[info] 7444310101155
+[info] 77410101011555
+[info] Elapsed(ms) : 315447
 ```
